@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>हिन्दी स्वर और व्यंजन अभ्यास</title>
+<style>
+  body {
+    font-family: "Noto Sans Devanagari", "Mangal", Arial, sans-serif;
+    background-color: #fffaf2;
+    color: #222;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    color: #d12f2f;
+  }
+  p {
+    text-align: center;
+    font-size: 1.1em;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 8px;
+    font-size: 1.4em;
+  }
+  th {
+    background-color: #ffe4b5;
+  }
+  td {
+    background-color: #fff8dc;
+  }
+  td span {
+    cursor: pointer;
+    color: #c21807;
+    font-weight: bold;
+  }
+  td span:hover {
+    color: #ff6600;
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<h1>हिन्दी व्यंजन + स्वर तालिका</h1>
+<p>किसी भी अक्षर पर क्लिक करें और उसका उच्चारण सुनें 🔊</p>
+
+<table id="hindiTable">
+  <tr>
+    <th>व्यंजन</th>
+    <th>+ अ</th>
+    <th>+ आ</th>
+    <th>+ इ</th>
+    <th>+ ई</th>
+    <th>+ उ</th>
+    <th>+ ऊ</th>
+    <th>+ ए</th>
+    <th>+ ऐ</th>
+    <th>+ ओ</th>
+    <th>+ औ</th>
+  </tr>
+</table>
+
+<script>
+const vowels = ["अ","आ","इ","ई","उ","ऊ","ए","ऐ","ओ","औ"];
+const vowelMarks = ["","ा","ि","ी","ु","ू","े","ै","ो","ौ"];
+const consonants = [
+  "क","ख","ग","घ","च","छ","ज","झ","ट","ठ","ड","ढ","त","थ","द","ध","न",
+  "प","फ","ब","भ","म","य","र","ल","व","श","ष","स","ह"
+];
+
+const table = document.getElementById("hindiTable");
+
+// build rows
+consonants.forEach(con => {
+  const row = document.createElement("tr");
+  const first = document.createElement("td");
+  first.textContent = con;
+  row.appendChild(first);
+
+  vowels.forEach((v, i) => {
+    const td = document.createElement("td");
+    const combo = con + vowelMarks[i];
+    const span = document.createElement("span");
+    span.textContent = combo;
+    span.onclick = () => speak(combo);
+    td.appendChild(span);
+    row.appendChild(td);
+  });
+  table.appendChild(row);
+});
+
+// Hindi speech synthesis
+function speak(text) {
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.lang = "hi-IN";   // Hindi voice
+  msg.rate = 0.9;
+  msg.pitch = 1.0;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(msg);
+}
+</script>
+
+</body>
+</html>
