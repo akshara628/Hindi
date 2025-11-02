@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>हिन्दी संयुक्त व्यंजन + स्वर अभ्यास</title>
+<style>
+  body {
+    font-family: "Noto Sans Devanagari", "Mangal", Arial, sans-serif;
+    background-color: #fffaf2;
+    color: #222;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    color: #d12f2f;
+  }
+  p {
+    text-align: center;
+    font-size: 1.1em;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 8px;
+    font-size: 1.2em;
+    vertical-align: middle;
+  }
+  th {
+    background-color: #ffe4b5;
+  }
+  td {
+    background-color: #fff8dc;
+  }
+  td span {
+    cursor: pointer;
+    color: #c21807;
+    font-weight: bold;
+    display: block;
+  }
+  td .roman {
+    font-size: 0.8em;
+    color: green;
+  }
+  td span:hover {
+    color: #ff6600;
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<h1>हिन्दी संयुक्त व्यंजन + स्वर तालिका</h1>
+<p>किसी भी अक्षर पर क्लिक करें और उसका उच्चारण सुनें 🔊</p>
+
+<table id="blendTable">
+  <tr>
+    <th>संयुक्त व्यंजन</th>
+    <th>+ अ</th>
+    <th>+ आ</th>
+    <th>+ इ</th>
+    <th>+ ई</th>
+    <th>+ उ</th>
+    <th>+ ऊ</th>
+    <th>+ ए</th>
+    <th>+ ऐ</th>
+    <th>+ ओ</th>
+    <th>+ औ</th>
+  </tr>
+</table>
+
+<script>
+const vowels = ["अ","आ","इ","ई","उ","ऊ","ए","ऐ","ओ","औ"];
+const vowelMarks = ["","ा","ि","ी","ु","ू","े","ै","ो","ौ"];
+const romanVowels = ["a","aa","i","ee","u","oo","e","ai","o","au"];
+
+const blends = [
+  ["क्र","kr"], ["ग्र","gr"], ["प्र","pr"], ["ब्र","br"], ["त्र","tr"],
+  ["द्र","dr"], ["फ्र","fr"], ["फ्ल","fl"], ["ब्ल","bl"], ["ग्ल","gl"],
+  ["प्ल","pl"], ["क्ल","kl"], ["स्र","sr"], ["श्र","shra"], ["स्थ","stha"],
+  ["स्प","spa"], ["स्त","sta"], ["स्क","ska"], ["स्क्र","skra"], ["स्ट्र","stra"],
+  ["स्व","swa"], ["स्म","sma"], ["स्न","sna"], ["ध्र","dhra"], ["थ्र","thra"],
+  ["छ्र","chra"], ["क्ष","ksha"], ["ज्ञ","gya"], ["भ्र","bhra"], ["ह्र","hra"]
+];
+
+// --- BUILD TABLE ---
+const table = document.getElementById("blendTable");
+
+blends.forEach(([blend, translit]) => {
+  const row = document.createElement("tr");
+  const first = document.createElement("td");
+  first.innerHTML = `<b>${blend}</b><div class='roman'>(${translit})</div>`;
+  row.appendChild(first);
+
+  vowels.forEach((vowel, i) => {
+    const td = document.createElement("td");
+    const combo = blend + vowelMarks[i];
+    const romanCombo = translit + romanVowels[i];
+    const span = document.createElement("span");
+    span.textContent = combo;
+    span.onclick = () => speakHindi(combo);
+    const small = document.createElement("div");
+    small.className = "roman";
+    small.textContent = romanCombo;
+    td.appendChild(span);
+    td.appendChild(small);
+    row.appendChild(td);
+  });
+
+  table.appendChild(row);
+});
+
+// --- FIXED HINDI VOICE FUNCTION ---
+function speakHindi(text) {
+  // Cancel any ongoing speech safely
+  window.speechSynthesis.cancel();
+
+  // Delay ensures voices are loaded properly and queue resets
+  setTimeout(() => {
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "hi-IN";
+    utter.rate = 0.9;
+    utter.pitch = 1.0;
+    window.speechSynthesis.speak(utter);
+  }, 150);
+}
+</script>
+
+</body>
+</html>
